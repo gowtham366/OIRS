@@ -1,0 +1,278 @@
+//TABLE USER MASTER
+
+create table tbl_user_master(user_id varchar2(6) primary key,password varchar2(64),role varchar2(10),last_login date,hint varchar2(30));
+
+Table created.
+
+desc tbl_user_master;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+
+ USER_ID                                   NOT NULL VARCHAR2(6)
+ PASSWORD                                           VARCHAR2(64)
+ ROLE                                               VARCHAR2(10)
+ LAST_LOGIN                                         DATE
+ HINT                                               VARCHAR2(30)
+
+//TABLE PROJECT MASTER
+ 
+create table tbl_project_master(project_id varchar2(6) primary key,project_name varchar2(20),
+description varchar2(30),start_date date,end_date date,rm_id varchar2(6) references tbl_user_master(user_id),status varchar2(6));
+
+Table created.
+
+
+desc tbl_project_master;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+
+ PROJECT_ID                                NOT NULL VARCHAR2(6)
+ PROJECT_NAME                                       VARCHAR2(20)
+ DESCRIPTION                                        VARCHAR2(30)
+ START_DATE                                         DATE
+ END_DATE                                           DATE
+ RM_ID                                              VARCHAR2(6)
+ STATUS                                             VARCHAR2(6)
+
+
+
+
+//TABLE REQUISITION
+
+create table tbl_requisition(requisition_id varchar2(6) primary key,rm_id varchar2(6) references tbl_user_master(user_id),
+project_id varchar2(6) references tbl_project_master(project_id),date_created date,date_closed date,current_status varchar2(10),
+vacancy_name varchar2(20),skill varchar2(15),domain varchar2(15),number_required number,number_assigned number);
+
+
+desc tbl_requisition;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+
+ REQUISITION_ID                            NOT NULL VARCHAR2(6)
+ RM_ID                                              VARCHAR2(6)
+ PROJECT_ID                                         VARCHAR2(6)
+ DATE_CREATED                                       DATE
+ DATE_CLOSED                                        DATE
+ CURRENT_STATUS                                     VARCHAR2(10)
+ VACANCY_NAME                                       VARCHAR2(20)
+ SKILL                                              VARCHAR2(15)
+ DOMAIN                                             VARCHAR2(15)
+ NUMBER_REQUIRED                                    NUMBER
+ NUMBER_ASSIGNED                                    NUMBER
+
+
+//TABLE EMPLOYEE MASTER
+
+create table tbl_employee_master(employee_id varchar2(6) primary key,employee_name varchar2(50),skill varchar2(15),
+domain varchar2(15),experience_yrs number,date_created date,project_id varchar2(6) references tbl_project_master(project_id),
+req_id varchar2(6) references tbl_requisition(requisition_id));
+
+Table created.
+
+desc tbl_employee_master;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+
+ EMPLOYEE_ID                               NOT NULL VARCHAR2(6)
+ EMPLOYEE_NAME                                      VARCHAR2(50)
+ SKILL                                              VARCHAR2(15)
+ DOMAIN                                             VARCHAR2(15)
+ EXPERIENCE_YRS                                     NUMBER
+ DATE_CREATED                                       DATE
+ PROJECT_ID                                         VARCHAR2(6)
+ REQ_ID                                             VARCHAR2(6)
+
+
+
+// INSERTING VALUES INTO tbl_user_master
+
+insert into tbl_user_master values('admin','admin','admin',sysdate,'role');
+
+1 row created.
+
+
+insert into tbl_user_master values('rmge','Executive','RMGE',sysdate,'rmge');
+
+1 row created.
+
+insert into tbl_user_master values('rm1','Manager','RM',sysdate,'rm');
+
+1 row created.
+
+insert into tbl_user_master values('rm2','Manager','RM',sysdate,'rm');
+
+1 row created.
+
+insert into tbl_user_master values('rm3','Manager','RM',sysdate,'rm');
+
+1 row created.
+
+
+
+
+//INSERTING VALUES INTO tbl_project_master
+
+insert into tbl_project_master values('P01','Training','Training',sysdate,'28-jul-2019','rm1','open');
+
+1 row created.
+
+insert into tbl_project_master values('P02','Training','Training',sysdate,'08-mar-2019','rm1','open');
+
+1 row created.
+
+insert into tbl_project_master values('P03','Marketing','Marketing','04-apr-2017','08-mar-2023','rm2','close');
+
+1 row created.
+
+insert into tbl_project_master values('P04','Marketing','Marketing','16-feb-2016','18-oct-2023','rm2','close');
+
+1 row created.
+
+insert into tbl_project_master values('P05','Banking','Banking','08-mar-2018','03-jan-2030','rm3','close');
+
+1 row created.
+
+insert into tbl_project_master values('P06','Finance','Finance','08-feb-2018','31-mar-2028','rm3','open');
+
+1 row created.
+
+
+//INSERTING VALUES INTO tbl_requisition
+
+insert into tbl_requisition values('R01','rm1','P01',sysdate,'29-jun-2019','open','Team lead','level 1','Java',2,1);
+
+1 row created.
+
+insert into tbl_requisition values('R02','rm1','P02',sysdate,'18-jun-2029','open','Manager','level 3','Oracle',2,1);
+
+1 row created.
+
+
+insert into tbl_requisition values('R03','rm2','P03',sysdate,'14-mar-2029','open','Member','level 2','Oracle',4,2);
+
+1 row created.
+
+insert into tbl_requisition values('R04','rm2','P04',sysdate,'15-mar-2026','open','Member','level 2','DOTNET',6,3);
+
+1 row created.
+
+insert into tbl_requisition values('R05','rm3','P05',sysdate,'15-apr-2023','open','Member','level 1','Testing',4,2);
+
+1 row created.
+
+insert into tbl_requisition values('R06','rm3','P06',sysdate,'15-feb-2022','open','Team lead','level 3','Testing',4,3);
+
+1 row created.
+
+insert into tbl_requisition values('R06','null','P07',sysdate,'20-feb-2019','open','team lead','level 2','testing',5,3);
+
+1 row created.
+
+
+
+
+//INSERTING VALUES INTO tbl_employee_master
+
+insert into tbl_employee_master values('E01','Rose','level2','Oraps',9,sysdate,'P01','R01');
+
+1 row created.
+
+insert into tbl_employee_master values('E02','Mary','level2','Java',5,sysdate,'P02','R02');
+
+1 row created.
+
+insert into tbl_employee_master values('E03','Jack','level3','Java',12,sysdate,'P03','R03');
+
+1 row created.
+
+insert into tbl_employee_master values('E04','Rana','level2','Testing',7,sysdate,'P04','R04');
+
+1 row created.
+
+insert into tbl_employee_master values('E05','Sana','level3','Testing',12,sysdate,'P05','R05');
+
+1 row created.
+
+insert into tbl_employee_master values('E06','Pinky','level1','Oraps',2,sysdate,'P06','R06');
+
+1 row created.
+
+insert into tbl_employee_master values('E13','Ram','level2','java',3,SYSDATE,'rmg',null);
+
+1 row created.
+
+insert into tbl_employee_master values('E14','Sita','level2','java',4,SYSDATE,'rmg',null);
+
+1 row created.
+
+insert into tbl_employee_master values('E15','Rahul','level2','java',5,SYSDATE,'rmg',null);
+
+1 row created.
+
+insert into tbl_employee_master values('E16','Rima','level2','java',6,SYSDATE,'rmg',null);
+
+1 row created.
+
+insert into tbl_employee_master values('E17','Priya','level2','java',7,SYSDATE,'rmg',null);
+
+1 row created.
+
+insert into tbl_employee_master values('E18','Swathi','level3','dotnet',7,SYSDATE,'rmg',null);
+
+1 row created.
+
+insert into tbl_employee_master values('E19','Monica','level3','dotnet',8,SYSDATE,'rmg',null);
+
+1 row created.
+
+insert into tbl_employee_master values('E20','Veena','level3','dotnet',9,SYSDATE,'rmg',null);
+
+1 row created.
+
+insert into tbl_employee_master values('E21','Sathya','level3','dotnet',9,SYSDATE,'rmg',null);
+
+1 row created.
+
+insert into tbl_employee_master values('E22','Ruhi','level3','dotnet',10,SYSDATE,'rmg',null);
+
+1 row created.
+
+insert into tbl_employee_master values('E23','Vinith','level4','testing',3,SYSDATE,'rmg',null);
+
+1 row created.
+
+insert into tbl_employee_master values('E24','Manila','level4','testing',5,SYSDATE,'rmg',null);
+
+1 row created.
+
+insert into tbl_employee_master values('E25','Prathyu','level4','testing',6,SYSDATE,'rmg',null);
+
+1 row created.
+
+insert into tbl_employee_master values('E26','Vyshu','level4','testing',9,SYSDATE,'rmg',null);
+
+1 row created.
+
+insert into tbl_employee_master values('E27','jahnavi','level4','testing',10,SYSDATE,'rmg',null);
+
+1 row created.
+
+insert into tbl_employee_master values('E28','Preethi','level5','oraps',12,SYSDATE,'rmg',null);
+
+1 row created.
+
+insert into tbl_employee_master values('E29','Ramesh','level5','oraps',9,SYSDATE,'rmg',null);
+
+1 row created.
+
+insert into tbl_employee_master values('E30','John','level5','oraps',14,SYSDATE,'rmg',null);
+
+1 row created.
+
+insert into tbl_employee_master values('E31','Vicky','level5','oraps',5,SYSDATE,'rmg',null);
+
+1 row created.
+
+insert into tbl_employee_master values('E32','Keerthana','level5','oraps',8,SYSDATE,'rmg',null);
+
+1 row created.
